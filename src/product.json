@@ -1,0 +1,22 @@
+{
+  "product": [
+    {
+      "id": 1,
+      "name": "T-Shirt",
+      "description": "Lorem Ipsum Dolor Sit Amet",
+      "price": 500000
+    },
+    {
+      "id": 2,
+      "name": "Jeans",
+      "description": "Lorem Ipsum Dolor Sit Amet",
+      "price": 300000
+    },
+    {
+      "id": 3,
+      "name": "Jacket",
+      "description": "Lorem Ipsum Dolor Sit Amet",
+      "price": 200000
+    }
+  ]
+}

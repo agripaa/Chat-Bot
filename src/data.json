@@ -1,0 +1,29 @@
+{
+  "bot": [
+    {
+      "id": 1,
+      "chat": "Selamat datang di toko cuy, silahkan masukan nama mu",
+      "sender": "bot"
+    },
+    {
+      "id": 2,
+      "chat": "Silahkan pilih produk sesuai id nya",
+      "sender": "bot"
+    },
+    {
+      "id": 3,
+      "chat": "Silahkan masukan jumlah pembelian",
+      "sender": "bot"
+    },
+    {
+      "id": 4,
+      "chat": "Silahkan masukan alamat",
+      "sender": "bot"
+    },
+    {
+        "id": 5,
+        "chat": "pesanan di proses",
+        "sender": "bot"
+    }
+  ]
+}
