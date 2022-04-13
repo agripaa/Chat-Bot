@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  max-width: 80vw;
+  min-height: 100vh;
+  margin: 0 auto;
+
+  @media only screen and (max-width: 768px) {
+    max-width: 100vw;
+  }
 `;
 
 export const Header = styled.div`
-  max-width: 500px;
   height: 150px;
   background-color: #eaeaea;
   color: black;
@@ -20,83 +24,123 @@ export const Header = styled.div`
 `;
 
 export const Product = styled.div`
-  max-width: 500px;
-  height: 250px;
   display: flex;
+  flex-direction: row;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const ProductList = styled.div`
-  flex: 1 1 0px;
-  height: 200px;
-  border: 1px solid black;
+  padding: 24px;
   text-align: center;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+
+  @media only screen and (max-width: 768px) {
+    padding: 12px;
+  }
+`;
+
+export const ProductId = styled.p`
+  letter-spacing: 2px;
+  font-size: 12px;
 `;
 
 export const ProductName = styled.h3`
   letter-spacing: 4px;
+  margin-top: 1.5em;
+
+  @media only screen and (max-width: 768px) {
+    margin-top: 0.5em;
+  }
 `;
 
 export const ProductDescription = styled.p`
-  font-weight: 500;
+  color: #242424;
+  letter-spacing: 2px;
+  margin-top: 2px;
+  font-size: 12px;
 `;
 
 export const ProductPrice = styled.p`
   font-weight: 800;
+  margin-top: 1.5em;
+
+  @media only screen and (max-width: 768px) {
+    margin-top: 0.5em;
+  }
 `;
 
 export const Chat = styled.div`
-  max-width: 500px;
-  height: 400px;
+  height: 280px;
+  margin-top: 1em;
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
 `;
 
 export const ChatBox = styled.div`
   max-height: 600px;
-  width: 100%;
-  padding: 10px;
-  overflow-y: auto;
+  padding: 10px 15px;
+  height: 100%;
+  overflow: auto;
+`;
+
+export const WrapperBubbleBot = styled.div`
+  width: fit-content;
+  margin-bottom: 20px;
+  margin-right: auto;
+  overflow: hidden;
+`;
+
+export const WrapperBubbleUser = styled.div`
+  width: fit-content;
+  margin-bottom: 20px;
+  margin-left: auto;
+  overflow: hidden;
 `;
 
 export const BubbleBot = styled.div`
-  min-height: 30px;
   width: fit-content;
-  padding: 6px;
-  background-color: blue;
-  margin: 8px 0;
-  border-radius: 6px;
-  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #3d85c6;
+  color: #fff;
 `;
 
 export const BubbleUser = styled.div`
-  min-height: 30px;
   width: fit-content;
-  padding: 6px;
-  background-color: #eaeaea;
-  margin: 8px 0;
-  margin-right: 26px;
-  border-radius: 6px;
-  margin-left: auto;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #e1e1e1;
 `;
 
 export const ChatInputWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid black;
-  padding-top: 10px;
+  align-items: center;
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
+  height: 80px;
 `;
 
 export const ChatInput = styled.input`
-  border-radius: 4px;
-  border: 1px solid black;
-  height: 30px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f0edf7;
+  outline: none;
+  border: none;
   width: 60%;
+  height: 35px;
 `;
 
 export const ChatSubmit = styled.button`
-  border-radius: 4px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #2986cc;
   border: none;
-  background-color: blue;
-  color: white;
-  height: 30px;
+  outline: none;
+  color: #fff;
+  cursor: pointer;
   width: 30%;
+  height: 35px;
 `;

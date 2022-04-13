@@ -8,9 +8,9 @@
     },
     {
       "id": 2,
-      "name": "Jeans",
+      "name": "Underwear",
       "description": "Lorem Ipsum Dolor Sit Amet",
-      "price": 300000
+      "price": 10000
     },
     {
       "id": 3,

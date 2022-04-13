@@ -21,9 +21,19 @@
       "sender": "bot"
     },
     {
-        "id": 5,
-        "chat": "pesanan di proses",
-        "sender": "bot"
+      "id": 5,
+      "chat": "Pesanan di proses",
+      "sender": "bot"
+    }
+  ],
+  "khusus": [
+    {
+      "chat": "Produk yang dipilih tidak ada, silahkan pilih kembali produknya cuy",
+      "sender": "bot"
+    },
+    {
+      "chat": "Silahkan masukan jumlah dalam bentuk angka cuy",
+      "sender": "bot"
     }
   ]
 }

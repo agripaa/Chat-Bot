@@ -1,12 +1,13 @@
 import data from "./data.json";
 import ProductData from "./product.json";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import {
   Container,
   Header,
   Product,
   ProductList,
+  ProductId,
   ProductName,
   ProductDescription,
   ProductPrice,
@@ -15,6 +16,8 @@ import {
   ChatInput,
   ChatSubmit,
   ChatBox,
+  WrapperBubbleBot,
+  WrapperBubbleUser,
   BubbleBot,
   BubbleUser,
 } from "./styled";
@@ -25,78 +28,124 @@ const App = () => {
   const [chatList, setChatList] = useState([]);
   const [step, setStep] = useState("");
   const [keranjang, setKeranjang] = useState({});
+  const [disableButton, setDisableButton] = useState(false);
+
+  const chatRef = useRef();
 
   const submitChat = () => {
     let list;
     let chatBot;
     let chatUser = [];
+    let isFinishChat = false;
+
+    if (chatInput.length > 0) {
+      chatUser = [...chatList, { sender: "user", chat: chatInput }];
+      setChatList(chatUser);
+    }
 
     if (chatList.length === 0) {
       chatBot = data.bot[0];
       setStep("name");
     } else if (step === "name") {
-      chatUser = [...chatList, { sender: "user", chat: chatInput }];
       chatBot = data.bot[1];
       setStep("product");
 
-      let nama = { buyerName: chatInput };
+      const nama = { buyerName: chatInput };
       setKeranjang(nama);
     } else if (step === "product") {
-      chatUser = [...chatList, { sender: "user", chat: chatInput }];
-      chatBot = data.bot[2];
-      setStep("jumlah");
+      if (productList[chatInput - 1] === undefined) {
+        chatBot = data.khusus[0];
+      } else {
+        chatBot = data.bot[2];
+        setStep("jumlah");
 
-      let product = { ...keranjang, ...productList[chatInput - 1] };
-      setKeranjang(product);
+        const product = { ...keranjang, ...productList[chatInput - 1] };
+        setKeranjang(product);
+      }
     } else if (step === "jumlah") {
-      chatUser = [...chatList, { sender: "user", chat: chatInput }];
-      chatBot = data.bot[3];
-      setStep("alamat");
+      const jumlah = parseInt(chatInput);
+      if (isNaN(jumlah)) {
+        chatBot = data.khusus[1];
+      } else {
+        chatBot = data.bot[3];
+        setStep("alamat");
 
-      let jumlah = {
-        jumlah: chatInput,
-        totalHarga: keranjang.price * chatInput,
-      };
-      let product = { ...keranjang, ...jumlah };
-      setKeranjang(product);
+        const dataJumlah = {
+          jumlah: chatInput,
+          totalHarga: keranjang.price * chatInput,
+        };
+        const product = { ...keranjang, ...dataJumlah };
+        setKeranjang(product);
+      }
     } else if (step === "alamat") {
-      chatUser = [...chatList, { sender: "user", chat: chatInput }];
       chatBot = data.bot[4];
-      setStep("selesai");
+      isFinishChat = true;
 
-      let alamat = { alamat: chatInput };
-      let product = { ...keranjang, ...alamat };
+      const alamat = { alamat: chatInput };
+      const product = { ...keranjang, ...alamat };
       setKeranjang(product);
     }
     setChatInput("");
+    setDisableButton(true);
 
-    if (chatInput.length > 0) setChatList(chatUser);
     list = [...chatUser, chatBot];
-
     setTimeout(() => {
       setChatList(list);
+      setDisableButton(false);
+
+      if (isFinishChat) {
+        setTimeout(() => {
+          setStep("selesai");
+        }, 1000);
+      }
     }, 700);
   };
 
-// const handlerKeyboard = (x) => {
-//     if (x.keyCode == 13) {
-//       handleSubmitChat();
-//     }
-//   };
+  const repeatOrder = () => {
+    setChatList([]);
+    setKeranjang({});
+    setStep("");
+  };
+
+  const textButton = () => {
+    if (chatList.length === 0) {
+      return "Mulai Chat";
+    } else if (chatList.length > 0 && step !== "selesai") {
+      return "Kirim";
+    } else if (chatList.length > 0 && step === "selesai") {
+      return "Pesan Lagi";
+    }
+  };
+
+  const handleClick = () => {
+    if (step === "selesai") {
+      repeatOrder();
+    } else {
+      submitChat();
+    }
+  };
+
+  const scrollToBottom = () => {
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     setProductList(ProductData.product);
   }, []);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatList, step]);
+
   return (
     <Container>
-      <Header>Toko Cuy</Header>
-      {/* Ini Product */}
+      <Header>Toko Tokoan</Header>
+      {/* Product */}
       <Product>
         {productList.map((product, index) => {
           return (
             <ProductList key={index}>
-              <p>Id Product: {product.id}</p>
+              <ProductId>ID Product: {product.id}</ProductId>
               <ProductName>{product.name}</ProductName>
               <ProductDescription>{product.description}</ProductDescription>
               <ProductPrice>Rp. {product.price}</ProductPrice>
@@ -105,42 +154,54 @@ const App = () => {
         })}
       </Product>
 
-      {/* Ini Chat */}
+      {/* Chat */}
       <Chat>
         <ChatBox>
           {chatList.map((chat, index) => {
             return chat.sender === "bot" ? (
-              <BubbleBot>{chat.chat}</BubbleBot>
+              <WrapperBubbleBot>
+                <BubbleBot>{chat.chat}</BubbleBot>
+              </WrapperBubbleBot>
             ) : (
-              <BubbleUser>{chat.chat}</BubbleUser>
+              <WrapperBubbleUser>
+                <BubbleUser>{chat.chat}</BubbleUser>
+              </WrapperBubbleUser>
             );
           })}
           {step === "selesai" && (
-            <BubbleBot>
-              Pembelian anda:
-              <br />
-              Nama: {keranjang.buyerName}
-              <br />
-              Alamat: {keranjang.alamat}
-              <br />
-              Nama produk: {keranjang.name}
-              <br />
-              Harga produk: {keranjang.price}
-              <br />
-              Jumlah beli: {keranjang.jumlah}
-              <br />
-              Total Harga: {keranjang.totalHarga}
-            </BubbleBot>
+            <WrapperBubbleBot>
+              <BubbleBot>
+                Pembelian anda:
+                <br />
+                Nama: {keranjang.buyerName}
+                <br />
+                Alamat: {keranjang.alamat}
+                <br />
+                Nama produk: {keranjang.name}
+                <br />
+                Harga produk: {keranjang.price}
+                <br />
+                Jumlah beli: {keranjang.jumlah}
+                <br />
+                Total Harga: {keranjang.totalHarga}
+              </BubbleBot>
+            </WrapperBubbleBot>
           )}
+          <div ref={chatRef} />
         </ChatBox>
+
         <ChatInputWrapper>
           <ChatInput
             value={chatInput}
             onChange={(event) => {
               setChatInput(event.target.value);
             }}
+            disabled={chatList.length === 0 || step === "selesai"}
+            placeholder={chatList.length === 0 ? "klik tombol mulai chat" : ""}
           />
-          <ChatSubmit onClick={submitChat}>Submit</ChatSubmit>
+          <ChatSubmit onClick={handleClick} disabled={disableButton}>
+            {textButton()}
+          </ChatSubmit>
         </ChatInputWrapper>
       </Chat>
     </Container>
